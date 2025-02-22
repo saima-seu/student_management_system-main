@@ -1,0 +1,114 @@
+{% extends 'student_template/base_template.html' %}
+{% block page_title %}
+Result
+{% endblock page_title %}
+{% block main_content %}
+<head>
+<style>
+.print-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: block;
+}
+.print-button:hover {
+    background-color: #0062cc;
+}
+.card-body p {
+    font-size: 18px;
+    font-weight: bold;
+}
+</style>
+<style>
+@media print {
+    button.btn.btn-primary.btn-block {
+        display: none;
+    }
+    span.alert.alert-success {
+        background-color: transparent;
+        border: none;
+    }
+    .card-body p {
+        font-size: 18px;
+        font-weight: bold;
+    }
+}
+</style>
+</head>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <!-- /.card -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Result</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Student ID: {{ request.user.id }}</p>
+                    </div>
+                    <div class="table">
+                        <table class="table">
+                            <tr>
+                                <th>ID</th>
+                                <th>Subject</th>
+                                <th>Assignment Marks</th>
+                                <th>Exam Marks</th>
+                                <th>Total Marks</th>
+                                <th>Status</th>
+                            </tr>
+                            {% for row in studentresult %}
+                            <tr>
+                                <td>{{ row.id }}</td>
+                                <td>{{ row.subject_id.subject_name }}</td>
+                                <td>{{ row.subject_assignment_marks }}</td>
+                                <td>{{ row.subject_exam_marks }}</td>
+                                <td>{{ row.subject_assignment_marks|add:row.subject_exam_marks }}</td>
+                                <td>
+                                    {% if row.subject_assignment_marks|add:row.subject_exam_marks >= 85 %}
+                                    <span class="alert alert-success">A+</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 75 %}
+                                    <span class="alert alert-success">A</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 65 %}
+                                    <span class="alert alert-success">A-</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 60 %}
+                                    <span class="alert alert-success">B+</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 55 %}
+                                    <span class="alert alert-success">B</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 50 %}
+                                    <span class="alert alert-success">B-</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 45 %}
+                                    <span class="alert alert-success">C+</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 40 %}
+                                    <span class="alert alert-success">C</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 35 %}
+                                    <span class="alert alert-success">C-</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 30 %}
+                                    <span class="alert alert-success">D+</span>
+                                    {% elif row.subject_assignment_marks|add:row.subject_exam_marks >= 25 %}
+                                    <span class="alert alert-success">D</span>
+                                    {% else %}
+                                    <span class="alert alert-danger">E</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <button id="printButton" class="btn btn-primary btn-block">Print Result</button>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+document.getElementById('printButton').addEventListener('click',
+function() { window.print(); }); </script>
+<!-- /.content -->
+{% endblock main_content %}

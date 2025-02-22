@@ -1,0 +1,74 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+    View Admission
+{% endblock page_title %}
+
+{% block main_content %}
+    <!-- Main content -->
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admission Details</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Admission Details</h1>
+            <form method="GET">
+                <div class="form-group">
+                    <label for="student">Search Student:</label>
+                    <input type="text" class="form-control" id="student" name="student">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            {% if subjects %}
+                <div class="admission" style="background-color: white; margin-top: 20px; margin-bottom: 20px;">
+                    <!-- Student ID and Name -->
+                    <div class="student-details" style="padding: 10px;">
+                        <p>Student ID : {{ student.admin.id }}</p>
+                        <p>Student Name : {{ student }}</p>
+                    </div>
+                    <!-- Table for Subjects -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Subjects</th>
+                                <th>Signature</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for subject in subjects %}
+                                <tr>
+                                    <td>{{ subject.name }}</td>
+                                    <td></td> <!-- This column is initially empty -->
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No subjects found for the given student.</p>
+            {% endif %}
+            <!-- Button to print the admission details -->
+            <button onclick="printAdmission()" class="btn btn-primary">Print Admission</button>
+            <script>
+                function printAdmission() {
+                    var printContents = document.querySelector('.admission').innerHTML;
+                    var originalContents = document.body.innerHTML;
+                    document.body.innerHTML = printContents;
+                    window.print();
+                    document.body.innerHTML = originalContents;
+                }
+            </script>
+        </div>
+    </body>
+    </html>
+    <!-- /.content -->
+{% endblock main_content %}
+
+{% block custom_js %}
+{% endblock custom_js %}

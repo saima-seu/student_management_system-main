@@ -1,0 +1,192 @@
+{% extends 'student_template/base_template.html' %}
+{% block page_title %}
+    Examination Registration Form
+{% endblock page_title %}
+
+{% block main_content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Examination Registration Form</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form action="{% url 'save_subjects' %}" method="post">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="full-name">Full Name *</label>
+                                    <input type="text" class="form-control" id="full-name" name="full-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="initials">Name with Initials *</label>
+                                    <input type="text" class="form-control" id="initials" name="initials" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="permanent-address">Permanent Address *</label>
+                                    <textarea class="form-control" id="permanent-address" name="permanent-address" rows="4" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mobile-no">Mobile No. *</label>
+                                    <input type="tel" class="form-control" id="mobile-no" name="mobile-no" pattern="[0-9]{10}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="semester">Select Semester:</label>
+                                    <select class="form-control" id="semester" name="semester">
+                                        <option value="">Select Semester</option>
+                                        <option value='1st_Year_1st_Semester'>1st Year 1st Semester</option>
+                                        <option value='1st_Year_2st_Semester'>1st Year 2nd Semester</option>
+                                        <!-- Add options for other semesters here -->
+                                    </select>
+                                </div>
+                                <div class="form-group" id="subjectsContainer" style="display: none;">
+                                    <!-- Subjects will be dynamically rendered here -->
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="form-group">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        {% if message.tags == 'error' %}
+                                            <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                        {% endif %}
+                                        {% if message.tags == 'success' %}
+                                            <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        <!-- form end -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        document.getElementById('semester').addEventListener('change', function() {
+            var semester = this.value;
+            var subjectsContainer = document.getElementById('subjectsContainer');
+            subjectsContainer.innerHTML = ''; // Clear previous subjects
+            
+            if (semester === '1st_Year_1st_Semester') {
+                // Subjects for 1st Year 1st Semester
+                var subjects = [
+                    { id: 'subject1', name: 'ASM 11212 Introduction to Statistics' },
+                    { id: 'subject2', name: 'ASM 11221 Elementary Probability Theory' },
+                    { id: 'subject3', name: 'ASM 11231 Data Analysis using SPSS' },
+                    { id: 'subject4', name: 'BLM 11211 Principles of Biology' },
+                    { id: 'subject5', name: 'BLM 11221 Biological Chemistry' },
+                    { id: 'subject6', name: 'BLM 11231 Continuity of Life' },
+                    { id: 'subject7', name: 'BLM 11241 Practical Biology I' },
+                    { id: 'subject8', name: 'CHM 11212 Essentials of Inorganic Chemistry' },
+                    { id: 'subject9', name: 'CHM 11221 Chemical Kinetics' },
+                    { id: 'subject10', name: 'CHM 11231 Practical Chemistry I' },
+                    { id: 'subject11', name: 'CSM 11211 Computer Systems and Digital Organization' },
+                    { id: 'subject12', name: 'CSM 11222 Programming & Programming Languages' },
+                    { id: 'subject13', name: 'CSM 11231 Programming Practical' },
+                    { id: 'subject14', name: 'ESM 11212 Dynamic Earth' },
+                    { id: 'subject15', name: 'ESM 11221 Earth Processes' },
+                    { id: 'subject16', name: 'ESM 11231 Practicals in Fundamental Geology' },
+                    { id: 'subject17', name: 'HMM 11212 Graph Theory' },
+                    { id: 'subject18', name: 'HMM 11222 Tensor Calculus' },
+                    { id: 'subject19', name: 'MTM 11212 Fundamentals of Mathematics' },
+                    { id: 'subject20', name: 'MTM 11222 Vector Algebra and Geometry' },
+                    { id: 'subject21', name: 'PHM 11212 General Physics' },
+                    { id: 'subject22', name: 'PHM 11221 Physics in Biology and Medicine' },
+                    { id: 'subject23', name: 'PHM 11231 General Physics Laboratory I' },
+                    { id: 'subject24', name: 'BLC 11211 Biology for Physical Sciences I' },
+                    { id: 'subject25', name: 'MTC 11221 Mathematics for Biological Sciences I' },
+                    { id: 'subject26', name: 'ELA 11211 English Level I</label' },
+                    { id: 'subject27', name: 'CME 11211 Computational Mathematics' },
+                    { id: 'subject28', name: 'LTE 11221 Leadership and Team Work' },
+                    { id: 'subject29', name: 'SME 11231 Stress Management' },
+                    { id: 'subject30', name: 'SSE 11242 Statistics for Science' },
+
+                    // Add more subjects here
+                ];
+                
+                if (subjects.length > 0) {
+                    subjects.forEach(function(subject) {
+                        var checkbox = document.createElement('div');
+                        checkbox.className = 'custom-checkbox';
+                        checkbox.innerHTML = `
+                            <input type="checkbox" id="${subject.id}" name="subjects" value="${subject.name}">
+                            <label for="${subject.id}">${subject.name}</label>
+                        `;
+                        subjectsContainer.appendChild(checkbox);
+                    });
+                    subjectsContainer.style.display = 'block';
+                } else {
+                    subjectsContainer.style.display = 'none';
+                }
+            } else if (semester === '1st_Year_2st_Semester') {
+                // Random subjects for 1st Year 2nd Semester
+                var subjects = [
+                    { id: 'subject1', name: 'CSM 12212 DBSM' },
+                    { id: 'subject2', name: 'ABC 12345 XYZ' },
+                    { id: 'subject3', name: 'DEF 54321 GHI' },
+                    // Add more subjects here
+                ];
+                
+                if (subjects.length > 0) {
+                    subjects.forEach(function(subject) {
+                        var checkbox = document.createElement('div');
+                        checkbox.className = 'custom-checkbox';
+                        checkbox.innerHTML = `
+                            <input type="checkbox" id="${subject.id}" name="subjects" value="${subject.name}">
+                            <label for="${subject.id}">${subject.name}</label>
+                        `;
+                        subjectsContainer.appendChild(checkbox);
+                    });
+                    subjectsContainer.style.display = 'block';
+                } else {
+                    subjectsContainer.style.display = 'none';
+                }
+            } else {
+                subjectsContainer.style.display = 'none';
+            }
+        });
+    </script>
+    
+
+    <style>
+        .custom-checkbox input[type="checkbox"] {
+            display: none;
+        }
+
+        .custom-checkbox label {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+        }
+
+        .custom-checkbox label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #999;
+            border-radius: 4px;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked+label:before {
+            content: '\2713';
+            font-size: 16px;
+            line-height: 20px;
+            text-align: center;
+            background: #007bff;
+            color: #fff;
+        }
+    </style>
+{% endblock main_content %}
